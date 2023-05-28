@@ -1,0 +1,104 @@
+// https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id         Int    @id @default(autoincrement())
+  email      String
+  name       String @unique
+  password   String
+  status     Int    @default(0) //enabled/disabled/locked/loggedin/loggedin-locked/disabled-locked/resetpassword
+  userroleid Int
+
+  createdon  DateTime @default(now())
+  modifiedon DateTime @default(now())
+
+  userrole     UserRoles      @relation("UserRole", references: [id], fields: [userroleid])
+  UserSessions UserSessions[]
+  List         List[]
+  ListValues   ListValues[]
+
+  @@index([email])
+}
+
+model UserSessions {
+  id Int @id @default(autoincrement())
+
+  userid    Int
+  sessionid String @default(uuid())
+
+  createdon  DateTime @default(now())
+  modifiedon DateTime @default(now())
+
+  status Int @default(0) //0-active, 1-closed
+
+  user Users @relation(fields: [userid], references: [id])
+
+  @@unique([userid, sessionid])
+}
+
+model UserRoles {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  createdon  DateTime @default(now())
+  modifiedon DateTime @default(now())
+
+  useracls UserAcl[] @relation("Useracls")
+  users    Users[]   @relation("UserRole")
+}
+
+model UserAclType {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  value Int
+
+  createdon  DateTime @default(now())
+  modifiedon DateTime @default(now())
+
+  useracls UserAcl[] @relation("ACLType")
+}
+
+model UserAcl {
+  id Int @id @default(autoincrement())
+
+  userRolesId Int
+  acltype     Int
+  aclvalue    String
+
+  UserRoles   UserRoles   @relation("Useracls", fields: [userRolesId], references: [id])
+  acltypelink UserAclType @relation("ACLType", fields: [acltype], references: [id])
+}
+
+model List {
+  id         Int          @id @default(autoincrement())
+  name       String
+  createdby  Int
+  createdon  DateTime     @default(now())
+  modifiedon DateTime     @default(now())
+  Listvalues ListValues[]
+
+  createdbyUser Users @relation(fields: [createdby], references: [id])
+}
+
+model ListValues {
+  id        Int    @id @default(autoincrement())
+  listid    Int
+  key       String
+  value     String
+  createdby Int
+  status    Int    @default(0)
+
+  List List  @relation(fields: [listid], references: [id])
+  User Users @relation(fields: [createdby], references: [id])
+
+  @@unique([listid, key])
+  @@index([key])
+}

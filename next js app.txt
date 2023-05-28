@@ -1,0 +1,134 @@
+npx create-next-app@latest
+next i prisma --save-dev
+npx prisma init --datasource-provider sqlite
+
+schema.prisma
+	-difine db model
+	
+import {PrismaClient} from '@prisma/client'
+setup singleton to have single prisma client only
+
+
+import {Inter} from 'next/fonts/google';
+//inbuilt fonts from next
+
+
+npm run dev
+src/app/pages.tsx - > default file for get (/) path : think of index.html
+layout.tsx
+next uses its own link components to facilitate ruoting
+eg: <Link href="/new"></Link>
+will point to /new path
+
+
+can call server code from same page.tsx file  and it will make a server call and get the data
+:think of How DotNet's runat=server works
+-> unless we use some hook to run some code  it will always run the eniter code first on server
+	
+
+
+src/commponents
+	>TodoItem.tsx tsx since it allows HTML in js/ts ( the jsx one)
+	
+	
+run a server onnly on server : ->experimental option
+	function Test(){
+		"user server"
+		//runs on server
+		consloe.log('test') //-<, test will print on server console. not on browser console
+	}
+	
+form action can have  a name of function that is to be run on server and same can be used as the from action
+and when we submit that form the data of the form will be submitted to that function via a post call and that
+function will be called on we recive the data
+
+redirect from server to a different page =-> import {redirect} from 'next/navigation';
+redirect('/')-> to home page
+
+	
+if need to render a component on client , that means that the component has some js code that runs on browser
+like some evern handlers, then we need to conver the component to a client compoenent using following statement
+
+
+every component is by deafault a server component, meaning all code will run on server and generated html may be send to server
+in case we want to make it run some js code on brwoser we want to use "use client" option
+eg :
+inside the componets/item.tsx
+	"use client"
+	//all code here will run on browser
+	...
+	
+	
+
+.env file
+	DATABSE_URL= user:password@serverhost:port/db
+	
+	
+prisma db library ? mostly async
+	schema.prisma
+		
+		genrator client { //can have multiple generators, generatees type info for editor autocomplete
+			provider =  'prisma-client-js'  // generate js code to do db ops
+		}
+		
+		datasource db {// only one
+			provider = 'mysql'|'postgresql'|'sqlite' //must have
+			url = env("DATABSE_URL") 		 //must have, use env vars to secure
+		}
+		
+		model User {
+		//4 parts
+		// <name> <type> [<modifier eg:?->optional, !-> > <attributes eg : @id,@default(uuid()|@autoincrement()|now()),@unique,>]
+		//types = > Int String Boolean BigInt( for Large Numbers) Float/Decimal(more specific)
+		//	    DateTime (its the only one, even for date or even for just the time)
+		//	    some db support json as well, so in some dbs we can use 'Json' type as well
+		//	    Bytes - > blob
+		//	    Unsupported - > used by prisma to categories the unknown ones into it
+		///Relation ->
+		// can have a field belwo that points to a diffrent record eg :
+		// ParentUser  User @relation(fields:[userId], references:[id])
+		// or
+		// ChildUsers User[] //multiple users 
+		
+			id Int @id @default(autoincrement())
+			name String
+			
+			//Block level attributes
+			//begin with 2 @@ signs
+			// eg:
+			// @@unique([agen,name])
+			// @@index([email])
+			// @@id([title,authorid]) -->composite id cmbined private key, i think.
+		}
+		
+		enum Role {
+			BASIC
+			ADMIN
+		}
+		
+prisma cli
+
+	-> npx prisma migrate <env> [<name>] :think of entity framework in dotNet
+	>npx prisma migrate dev --name initial_migration
+	
+	-> npx prisma migrate <env> <name>
+	> npx prisma migrate dev update-db-schema
+	
+	-> npm prisma generate -> updat js(type defs eg model.d.ts) code for updated db
+	
+	
+do CRUD apis
+-------------
+	import {PrismaClient } from "@prisma/cleint"
+	 
+	const prisma = new PrismaClient(); //manges connection pool, use same instance every where, it will mange connections internally
+	
+	let user;
+	prisma.user.create({ data: {nme:'Ravi'} }).then((usr)=>{
+		user = usr
+		console.log(usr);
+		});
+	
+	
+	
+	
