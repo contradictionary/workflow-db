@@ -4,9 +4,6 @@ const prisma = new PrismaClient({ log: ['query'] });
 
 async function main() {
 
-
-    
-
 }
 
 main().then(result => console.log(result)).catch(err => { throw err }).finally(() => {
