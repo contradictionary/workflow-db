@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "seed": "node dist/seed.js"
+    "seed": "node dist/seed/seed.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/contradictionary/workflow-db#readme",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/node": "^20.2.5",
+    "bcrypt": "^5.1.0",
     "prisma": "^4.14.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"

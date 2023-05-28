@@ -8,87 +8,75 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id         Int    @id @default(autoincrement())
-  email      String
-  name       String @unique
+model users {
+  id         Int      @id @default(autoincrement())
+  login      String
+  email      String   @unique
+  name       String
   password   String
-  status     Int    @default(0) //enabled/disabled/locked/loggedin/loggedin-locked/disabled-locked/resetpassword
   userroleid Int
-
   createdon  DateTime @default(now())
   modifiedon DateTime @default(now())
+  status     Int      @default(0) //enabled/disabled/locked/loggedin/loggedin-locked/disabled-locked/resetpassword
 
-  userrole     UserRoles      @relation("UserRole", references: [id], fields: [userroleid])
-  UserSessions UserSessions[]
-  List         List[]
-  ListValues   ListValues[]
+  userrole            userroles      @relation("UserRole", references: [id], fields: [userroleid])
+  usercreatemultirole userroles[]    @relation("CreateRole")
+  usersessions        usersessions[]
+  list                list[]
+  listvalues          listvalues[]
 
   @@index([email])
 }
 
-model UserSessions {
-  id Int @id @default(autoincrement())
-
-  userid    Int
-  sessionid String @default(uuid())
-
+model usersessions {
+  id         Int      @id @default(autoincrement())
+  userid     Int
+  sessionid  String   @default(uuid())
+  device     String
   createdon  DateTime @default(now())
   modifiedon DateTime @default(now())
+  status     Int      @default(0) //0-active, 1-closed
 
-  status Int @default(0) //0-active, 1-closed
-
-  user Users @relation(fields: [userid], references: [id])
+  user users @relation(fields: [userid], references: [id])
 
   @@unique([userid, sessionid])
 }
 
-model UserRoles {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
+model userroles {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
   description String?
+  createdby   Int?
+  createdon   DateTime @default(now())
+  modifiedon  DateTime @default(now())
 
-  createdon  DateTime @default(now())
-  modifiedon DateTime @default(now())
+  createdbyUser users? @relation("CreateRole", fields: [createdby], references: [id])
 
-  useracls UserAcl[] @relation("Useracls")
-  users    Users[]   @relation("UserRole")
+  useracls useracl[] @relation("Useracls")
+  users    users[]   @relation("UserRole")
 }
 
-model UserAclType {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  value Int
+model useracl {
+  id          Int    @id @default(autoincrement())
+  userrolesid Int
+  type        Int
+  value       String
 
-  createdon  DateTime @default(now())
-  modifiedon DateTime @default(now())
-
-  useracls UserAcl[] @relation("ACLType")
+  userroles userroles @relation("Useracls", fields: [userrolesid], references: [id])
 }
 
-model UserAcl {
-  id Int @id @default(autoincrement())
-
-  userRolesId Int
-  acltype     Int
-  aclvalue    String
-
-  UserRoles   UserRoles   @relation("Useracls", fields: [userRolesId], references: [id])
-  acltypelink UserAclType @relation("ACLType", fields: [acltype], references: [id])
-}
-
-model List {
+model list {
   id         Int          @id @default(autoincrement())
   name       String
   createdby  Int
   createdon  DateTime     @default(now())
   modifiedon DateTime     @default(now())
-  Listvalues ListValues[]
+  listvalues listvalues[]
 
-  createdbyUser Users @relation(fields: [createdby], references: [id])
+  createdbyUser users @relation(fields: [createdby], references: [id])
 }
 
-model ListValues {
+model listvalues {
   id        Int    @id @default(autoincrement())
   listid    Int
   key       String
@@ -96,8 +84,8 @@ model ListValues {
   createdby Int
   status    Int    @default(0)
 
-  List List  @relation(fields: [listid], references: [id])
-  User Users @relation(fields: [createdby], references: [id])
+  list list  @relation(fields: [listid], references: [id])
+  User users @relation(fields: [createdby], references: [id])
 
   @@unique([listid, key])
   @@index([key])
