@@ -18,7 +18,7 @@ export const TABLE_NAMES = {
     APPSEQUENCE: 'appsequence',
     USERS: 'users',
     USERSESSIONS: 'usersessions',
-    OLDSESSIONS: 'oldsessions',
+    OLDUSERSESSIONS: 'oldusersessions',
     USERROLES: 'userroles',
     USERACL: 'useracl',
     LIST: 'list',
@@ -26,55 +26,98 @@ export const TABLE_NAMES = {
     LOGS: 'logs'
 }
 export const TABLE_FIELDS_NAMES = {
-    USERS: {
-        ID: "id",
-        LOGIN: "login",
-        EMAIL: "email",
-        NAME: "name",
-        PASSWORD: "password",
-        USERROLEID: "userroleid",
-        CREATEDON: "createdon",
-        MODIFIEDON: "modifiedon",
-        STATUS: "status",
+    [TABLE_NAMES.APPSEQUENCE]: {
+        SEQUENCENAME: 'sequencename',
+        SEQUENCEVAL: 'sequenceval',
+        SEQUENCESTEP: 'sequencestep',
+        CREATEDON: 'createdon',
+        MODIFIEDON: 'modifiedon',
     },
-    USERSESSIONS: {
+    [TABLE_NAMES.USERS]: {
+        ID: 'id',
+        LOGIN: 'login',
+        EMAIL: 'email',
+        NAME: 'name',
+        PASSWORD: 'password',
+        USERROLEID: 'userroleid',
+        CREATEDON: 'createdon',
+        MODIFIEDON: 'modifiedon',
+        STATUS: 'status',
+    },
+    [TABLE_NAMES.USERSESSIONS]: {
         ID: "id",
         USERID: "userid",
         SESSIONID: "sessionid",
         DEVICE: "device",
         CREATEDON: "createdon",
-        MODIFIEDON: "modifiedon",
         STATUS: "status",
     },
-    USERROLES: {
+    [TABLE_NAMES.OLDUSERSESSIONS]: {
         ID: "id",
-        NAME: "name",
-        DESCRIPTION: "description",
-        CREATEDBY: "createdby",
+        USERID: "userid",
+        SESSIONID: "sessionid",
+        DEVICE: "device",
         CREATEDON: "createdon",
-        MODIFIEDON: "modifiedon",
+        STATUS: "status",
+
+        USER: 'user',
     },
-    USERACL: {
-        ID: "id",
-        USERROLESID: "userrolesid",
-        TYPE: "type",
-        VALUE: "value"
-    },
-    LIST: {
+    [TABLE_NAMES.USERROLES]: {
         ID: 'id',
         NAME: 'name',
+        DESCRIPTION: 'description',
         CREATEDBY: 'createdby',
         CREATEDON: 'createdon',
         MODIFIEDON: 'modifiedon',
-        LISTVALUES: "listvalues",
-        LOGS: "logs"
     },
-    LISTVALUES: {
+    [TABLE_NAMES.USERACL]: {
+        ID: 'id',
+        USERROLESID: 'userrolesid',
+        TYPE: 'type',
+        VALUE: 'value',
+    },
+    [TABLE_NAMES.LIST]: {
+        ID: "id",
+        NAME: "name",
+        DESCRIPTION: "description",
+        CREATEDON: "createdon",
+        MODIFIEDON: "modifiedon",
+    },
+    [TABLE_NAMES.LISTVALUES]: {
         ID: "id",
         LISTID: "listid",
         KEY: "key",
         VALUE: "value",
-        CREATEDBY: "createdby",
         STATUS: "status"
+    },
+}
+export const RELATED_FIELD_NAMES = {
+    [TABLE_NAMES.USERS]: {
+        USERROLE: 'userrole',
+        USERSESSIONS: 'usersessions',
+        OLDUSERSESSIONS: 'oldusersessions',
+    },
+    [TABLE_NAMES.USERSESSIONS]: {
+        OLDUSERSESSIONS: 'oldusersessions',
+    },
+    [TABLE_NAMES.OLDUSERSESSIONS]: {
+        OLDUSERSESSIONS: 'oldusersessions',
+    },
+    [TABLE_NAMES.USERROLES]: {
+        USERACLS: 'useracls',
+        USERS: 'users',
+    },
+    [TABLE_NAMES.USERACL]: {
+        USERROLE: 'userrole',
+    },
+    [TABLE_NAMES.LIST]: {
+        LISTVALUES: 'listvalues',
+        LOGS: 'logs',
+    },
+    [TABLE_NAMES.LISTVALUES]: {
+        LIST: 'list',
+    },
+    [TABLE_NAMES.LOGS]: {
+        LIST: 'list',
     },
 }

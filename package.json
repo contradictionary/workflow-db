@@ -1,15 +1,18 @@
 {
   "name": "workflow-db",
   "version": "1.0.0",
-  "description": "to store the workflow db",
+  "description": "To store the workflow db",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "init": "npx prisma init --datasource-provider mysql",
-    "generate": "npx prisma generate --schema=./schema/database.prisma",
-    "migrate-prod": "npx prisma migrate prod --name initial --schema=./schema/database.prisma",
-    "migrate-dev": "npx prisma migrate dev --name initial --schema=./schema/database.prisma",
-    "seed": "node ./seed/seed-initial.js"
+    "init-mysql": "npx prisma init --datasource-provider mysql --schema=./schema/database.mysql.prisma",
+    "generate-mysql": "npx prisma generate --schema=./schema/database.mysql.prism",
+    "migrate-prod-mysql": "npx prisma migrate prod --name initial --schema=./schema/database.mysql.prism",
+    "migrate-dev-mysql": "npx prisma migrate dev --name initial --schema=./schema/database.mysql.prism",
+    "init-sqlite": "npx prisma init --datasource-provider sqlite --schema=./schema/database.sqlite.prisma",
+    "generate-sqlite": "npx prisma generate --schema=./schema/database.sqlite.prism",
+    "migrate-prod-sqlite": "npx prisma migrate prod --name initial --schema=./schema/database.sqlite.prism",
+    "migrate-dev-sqlite": "npx prisma migrate dev --name initial --schema=./schema/database.sqlite.prism"
   },
   "repository": {
     "type": "git",

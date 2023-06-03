@@ -4,9 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql" //also compatible with sqlite
+  provider     = "sqlite"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
 }
 
 model appsequence {
