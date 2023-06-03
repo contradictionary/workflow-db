@@ -1,0 +1,123 @@
+// https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql" //also compatible with sqlite
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model appsequence {
+  sequencename String    @unique
+  sequenceval  Int
+  sequencestep Int
+  createdon    DateTime?
+  modifiedon   DateTime?
+}
+
+model users {
+  id         Int      @id @default(autoincrement())
+  login      String   @unique
+  email      String   @unique
+  name       String
+  password   String
+  userroleid Int
+  createdon  DateTime @default(now())
+  modifiedon DateTime @default(now())
+  status     Int      @default(0) //enabled/disabled/locked/loggedin/loggedin-locked/disabled-locked/resetpassword
+
+  userrole     userroles      @relation(references: [id], fields: [userroleid])
+  usersessions usersessions[]
+
+  @@index([email])
+  @@index([userroleid]) //faster foreign key results
+}
+
+model usersessions {
+  id        Int      @id @default(autoincrement())
+  userid    Int
+  sessionid String   @default(uuid())
+  device    String
+  createdon DateTime @default(now()) //when creating new session
+
+  user users @relation(fields: [userid], references: [id])
+
+  @@unique([userid, sessionid])
+}
+
+model oldsessions {
+  id        Int      @id @default(autoincrement())
+  userid    Int
+  sessionid String   @default(uuid())
+  device    String
+  createdon DateTime @default(now()) //when moving from new to old session
+}
+
+model userroles {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  createdby   Int?
+  createdon   DateTime @default(now())
+  modifiedon  DateTime @default(now())
+
+  useracls useracl[]
+  users    users[]
+}
+
+model useracl {
+  id          Int    @id @default(autoincrement())
+  userrolesid Int
+  type        Int
+  value       String
+
+  userroles userroles @relation(fields: [userrolesid], references: [id])
+
+  @@unique([userrolesid, type])
+}
+
+model list {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  createdon  DateTime? @default(now())
+  modifiedon DateTime? @default(now())
+
+  listvalues listvalues[]
+  logs       logs[]
+}
+
+model listvalues {
+  id     Int    @id @default(autoincrement())
+  listid Int
+  key    String
+  value  String
+  status Int    @default(0)
+
+  list list @relation(fields: [listid], references: [id])
+
+  @@unique([listid, key])
+  @@index([key])
+  @@index([listid]) //faster foreign key results
+}
+
+model logs {
+  id        Int      @id @default(autoincrement())
+  listid    Int //defines kind of log
+  stringid  String?
+  numberid  String?
+  sdata1    String?
+  sdata2    String?
+  sdata3    String?
+  ndata1    Int?
+  ndata2    Int?
+  ndata3    Int?
+  ndata4    Int?
+  bdata1    Bytes?
+  createdon DateTime @default(now())
+
+  list list @relation(fields: [listid], references: [id])
+
+  @@index([listid]) //faster foreign key results
+}

@@ -1,27 +1,24 @@
 import { PrismaClient } from '@prisma/client';
 import { ADMIN_ROLE_NAME, BASIC_ROLE_NAME, SESSION_STATUS } from './enums.js';
-import { setAdminRoleId, setBasicRoleId } from '../login-apis.js';
-import { LogDebug, LogInfo, Logger } from '../../common/logs.js';
-import chalk from 'chalk';
-let objLog = new Logger();
+// import { LogDebug, LogInfo, Logger } from '../../common/logs.js';
 export const prismaClient = new PrismaClient({
     log: [
-        {
-            emit: 'event',
-            level: 'query',
-        },
+        // {
+        //     emit: 'event',
+        //     level: 'query',
+        // },
         {
             emit: 'event',
             level: 'error',
         },
-        {
-            emit: 'event',
-            level: 'info',
-        },
-        {
-            emit: 'event',
-            level: 'warn',
-        },
+        // {
+        //     emit: 'event',
+        //     level: 'info',
+        // },
+        // {
+        //     emit: 'event',
+        //     level: 'warn',
+        // },
     ],
 });
 // prismaClient.$use((params,next)=>{
@@ -30,28 +27,28 @@ export const prismaClient = new PrismaClient({
 // prismaClient.$on('query', (e) => objLog.log(`query|${e.query}|params|${e.params}|duration|${e.duration}`));
 // prismaClient.$on('warn', (e) => objLog.warn(`timestamp|${e.timestamp}|message|${e.message}|target|${e.target}`));
 // prismaClient.$on('info', (e) => objLog.debug(`timestamp|${e.timestamp}|message|${e.message}|target|${e.target}`));
-prismaClient.$on('error', (e) => objLog.error(`timestamp|${e.timestamp}|message|${e.message}|target|${e.target}`));
+prismaClient.$on('error', (e) => {/*objLog.error(`timestamp|${e.timestamp}|message|${e.message}|target|${e.target}`)*/ });
 const pragmas = ['journal_mode = WAL'];
 export function RunPragma() {
     pragmas.forEach((item) => prismaClient.$executeRaw`PRAGMA ${item}`);
     return true;
 }
-export async function UpdateDBValues() {
-    let role = await prismaClient.userroles.findFirst({ where: { name: BASIC_ROLE_NAME } });
-    if (role) {
-        setBasicRoleId(role.id);
-        LogDebug('Basic user role Id', role.id);
-    }
+// export async function UpdateDBValues() {
+//     let role = await prismaClient.userroles.findFirst({ where: { name: BASIC_ROLE_NAME } });
+//     if (role) {
+//         setBasicRoleId(role.id);
+//         // LogDebug('Basic user role Id', role.id);
+//     }
 
-    role = await prismaClient.userroles.findFirst({ where: { name: ADMIN_ROLE_NAME } });
-    if (role) {
-        setAdminRoleId(role.id);
-        LogDebug('admin user role Id', role.id);
-    }
-    let result = await moveAllsessions();
-    if (result) LogInfo('sessions cleared', result.length / 2);
-    return true;
-}
+//     role = await prismaClient.userroles.findFirst({ where: { name: ADMIN_ROLE_NAME } });
+//     if (role) {
+//         setAdminRoleId(role.id);
+//         // LogDebug('admin user role Id', role.id);
+//     }
+//     let result = await moveAllsessions();
+//     // if (result) LogInfo('sessions cleared', result.length / 2);
+//     return true;
+// }
 async function moveAllsessions() {
     let sessions = await prismaClient.usersessions.findMany();
     if (!sessions || !sessions.length) return;
@@ -67,15 +64,14 @@ async function moveAllsessions() {
 
     return prismaClient.$transaction(batches);
 }
-console.log(chalk.bgBlue.white('database client created'));//to make sure we are not accidently creating multiple instance
 export async function RunDB() {
-    objLog.init('db-logs');
+    // objLog.init('db-logs');
     let ret = RunPragma();
-    let ret1 = await UpdateDBValues();
+    // let ret1 = await UpdateDBValues();
 
-    return ret && ret1;
+    return ret //&& ret1;
 }
 export async function CloseDB() {
-    objLog.close();
+    // objLog.close();
     return prismaClient.$disconnect();
 }

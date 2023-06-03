@@ -4,26 +4,26 @@ export const ACL_TYPE = {
     INSERT: 3,
     DELETE: 4
 }
-export const SALR_ROUNDS = 10;
 export const ACL_VALUE_ALL = "-999"
 export const SEED_RECORD_OP_TYPE = {
     INSERT: 1,
     UPDATE: 2,
     DELETE: 3
 }
-export const BASIC_ROLE_NAME = 'basic user';
-export const ADMIN_ROLE_NAME = 'admin user';
 export const SESSION_STATUS = {
     ACTIVE: 0,
-    DEACTIVE: 1
+    INACTIVE: 1
 }
 export const TABLE_NAMES = {
+    APPSEQUENCE: 'appsequence',
     USERS: 'users',
     USERSESSIONS: 'usersessions',
+    OLDSESSIONS: 'oldsessions',
     USERROLES: 'userroles',
     USERACL: 'useracl',
     LIST: 'list',
     LISTVALUES: 'listvalues',
+    LOGS: 'logs'
 }
 export const TABLE_FIELDS_NAMES = {
     USERS: {
@@ -61,12 +61,13 @@ export const TABLE_FIELDS_NAMES = {
         VALUE: "value"
     },
     LIST: {
-        ID: "id",
-        NAME: "name",
-        CREATEDBY: "createdby",
-        CREATEDON: "createdon",
-        MODIFIEDON: "modifiedon",
+        ID: 'id',
+        NAME: 'name',
+        CREATEDBY: 'createdby',
+        CREATEDON: 'createdon',
+        MODIFIEDON: 'modifiedon',
         LISTVALUES: "listvalues",
+        LOGS: "logs"
     },
     LISTVALUES: {
         ID: "id",
@@ -76,26 +77,4 @@ export const TABLE_FIELDS_NAMES = {
         CREATEDBY: "createdby",
         STATUS: "status"
     },
-}
-export const CHILD_TABLE_FIELDS_INCLUDE = {
-    //parent table : {
-    //child table : /*field names*/
-    //}
-    [TABLE_NAMES.LIST]: {
-        [TABLE_NAMES.USERS]: {
-            fields: [TABLE_FIELDS_NAMES.USERS.NAME],
-            'name': 'createdbyUser'
-        },
-    },
-    [TABLE_NAMES.LISTVALUES]: {
-        [TABLE_NAMES.LIST]: {
-            fields: [TABLE_FIELDS_NAMES.LIST.NAME, TABLE_FIELDS_NAMES.LIST.CREATEDON,
-            TABLE_FIELDS_NAMES.LIST.CREATEDBY],
-            'name': 'list'
-        },
-        [TABLE_NAMES.USERS]: {
-            fields: [TABLE_FIELDS_NAMES.USERS.NAME],
-            'name': 'User'
-        },
-    }
 }

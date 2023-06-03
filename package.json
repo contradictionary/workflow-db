@@ -1,11 +1,15 @@
 {
   "name": "workflow-db",
   "version": "1.0.0",
-  "description": "to store the workflow db code",
+  "description": "to store the workflow db",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "build": "tsc",
-    "seed": "node dist/seed/seed.js"
+    "init": "npx prisma init --datasource-provider mysql",
+    "generate": "npx prisma generate --schema=./schema/database.prisma",
+    "migrate-prod": "npx prisma migrate prod --name initial --schema=./schema/database.prisma",
+    "migrate-dev": "npx prisma migrate dev --name initial --schema=./schema/database.prisma",
+    "seed": "node ./seed/seed-initial.js"
   },
   "repository": {
     "type": "git",
