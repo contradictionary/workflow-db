@@ -1,2 +1,7 @@
 npm install
 npx prisma init --datasource-provider mysql
+npx prisma generate
+tsc
+npm run seed
+
+planetscale pwd : pscale_pw_GkBM64EI0wTnRn2bBDPFTC1kOvCedZPkFh6MSfXWJL9

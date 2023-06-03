@@ -1,23 +1,29 @@
-export enum ACL_TYPE {
-    READ = 1,
-    WRITE,
-    INSERT,
-    DELETE
+export const ACL_TYPE = {
+    READ: 1,
+    WRITE: 2,
+    INSERT: 3,
+    DELETE: 4
 }
 export const SALR_ROUNDS = 10;
 export const ACL_VALUE_ALL = "-999"
-export enum SEED_RECORD_OP_TYPE {
-    INSERT = 1,
-    UPDATE,
-    DELETE
+export const SEED_RECORD_OP_TYPE = {
+    INSERT: 1,
+    UPDATE: 2,
+    DELETE: 3
 }
-export enum TABLE_NAMES {
-    USERS = 'users',
-    USERSESSIONS = 'usersessions',
-    USERROLES = 'userroles',
-    USERACL = 'useracl',
-    LIST = 'list',
-    LISTVALUES = 'listvalues',
+export const BASIC_ROLE_NAME = 'basic user';
+export const ADMIN_ROLE_NAME = 'admin user';
+export const SESSION_STATUS = {
+    ACTIVE: 0,
+    DEACTIVE: 1
+}
+export const TABLE_NAMES = {
+    USERS: 'users',
+    USERSESSIONS: 'usersessions',
+    USERROLES: 'userroles',
+    USERACL: 'useracl',
+    LIST: 'list',
+    LISTVALUES: 'listvalues',
 }
 export const TABLE_FIELDS_NAMES = {
     USERS: {
@@ -71,9 +77,25 @@ export const TABLE_FIELDS_NAMES = {
         STATUS: "status"
     },
 }
-export interface SeedRecord {
-    table: TABLE_NAMES
-    operation?: SEED_RECORD_OP_TYPE
-    records: Array<Record<string, any>>
+export const CHILD_TABLE_FIELDS_INCLUDE = {
+    //parent table : {
+    //child table : /*field names*/
+    //}
+    [TABLE_NAMES.LIST]: {
+        [TABLE_NAMES.USERS]: {
+            fields: [TABLE_FIELDS_NAMES.USERS.NAME],
+            'name': 'createdbyUser'
+        },
+    },
+    [TABLE_NAMES.LISTVALUES]: {
+        [TABLE_NAMES.LIST]: {
+            fields: [TABLE_FIELDS_NAMES.LIST.NAME, TABLE_FIELDS_NAMES.LIST.CREATEDON,
+            TABLE_FIELDS_NAMES.LIST.CREATEDBY],
+            'name': 'list'
+        },
+        [TABLE_NAMES.USERS]: {
+            fields: [TABLE_FIELDS_NAMES.USERS.NAME],
+            'name': 'User'
+        },
+    }
 }
-export type seeed_data_type = Array<SeedRecord>
