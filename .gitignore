@@ -2,3 +2,4 @@ node_modules
 db
 *.evn
 .env
+package-lock.json

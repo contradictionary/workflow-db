@@ -5,14 +5,16 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "init-mysql": "npx prisma init --datasource-provider mysql --schema=./schema/database.mysql.prisma",
-    "generate-mysql": "npx prisma generate --schema=./schema/database.mysql.prism",
-    "migrate-prod-mysql": "npx prisma migrate prod --name initial --schema=./schema/database.mysql.prism",
-    "migrate-dev-mysql": "npx prisma migrate dev --name initial --schema=./schema/database.mysql.prism",
-    "init-sqlite": "npx prisma init --datasource-provider sqlite --schema=./schema/database.sqlite.prisma",
-    "generate-sqlite": "npx prisma generate --schema=./schema/database.sqlite.prism",
-    "migrate-prod-sqlite": "npx prisma migrate prod --name initial --schema=./schema/database.sqlite.prism",
-    "migrate-dev-sqlite": "npx prisma migrate dev --name initial --schema=./schema/database.sqlite.prism"
+    "generate-dev-local:mysql": "dotenv -e .env.mysql.dev.local -- npx prisma generate",
+    "migrate-dev-local:mysql": "dotenv -e .env.mysql.dev.local -- npx prisma migrate dev --name initial",
+    "setup-local-dev-mysql": "npm run generate-dev-local:mysql && npm run migrate-dev-local:mysql",
+    "generate-online:mysql": "dotenv -e .env.mysql.dev.online -- npx prisma generate",
+    "migrate-online:mysql": "dotenv -e .env.mysql.dev.online -- npx prisma db push --force-reset --accept-data-loss",
+    "setup-online-dev-mysql": "npm run generate-online:mysql && npm run migrate-online:mysql",
+    "init:sqlite": "dotenv -e .env.sqlite -- npx prisma init --datasource-provider sqlite --schema=./prisma/workflow-db.sqlite.prisma",
+    "generate:sqlite": "dotenv -e .env.sqlite -- npx prisma generate --schema=./prisma/workflow-db.sqlite.prisma",
+    "migrate:sqlite": "dotenv -e .env.sqlite -- npx prisma migrate dev --name initial --schema=./prisma/workflow-db.sqlite.prisma",
+    "setup-sqlite": "npm run init:sqlite && npm run generate:sqlite && npm run migrate:sqlite"
   },
   "repository": {
     "type": "git",
@@ -26,10 +28,10 @@
   },
   "homepage": "https://github.com/contradictionary/workflow-db#readme",
   "devDependencies": {
-    "bcrypt": "^5.1.0",
     "prisma": "^4.14.1"
   },
   "dependencies": {
-    "@prisma/client": "^4.14.1"
+    "@prisma/client": "^4.14.1",
+    "dotenv-cli": "^7.2.1"
   }
 }
