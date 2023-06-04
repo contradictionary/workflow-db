@@ -5,15 +5,6 @@ export const ACL_TYPE = {
     DELETE: 4
 }
 export const ACL_VALUE_ALL = "-999"
-export const SEED_RECORD_OP_TYPE = {
-    INSERT: 1,
-    UPDATE: 2,
-    DELETE: 3
-}
-export const SESSION_STATUS = {
-    ACTIVE: 0,
-    INACTIVE: 1
-}
 export const TABLE_NAMES = {
     APPSEQUENCE: 'appsequence',
     USERS: 'users',
@@ -21,7 +12,7 @@ export const TABLE_NAMES = {
     OLDUSERSESSIONS: 'oldusersessions',
     USERROLES: 'userroles',
     USERACL: 'useracl',
-    LIST: 'list',
+    LISTS: 'lists',
     LISTVALUES: 'listvalues',
     LOGS: 'logs'
 }
@@ -76,7 +67,7 @@ export const TABLE_FIELDS_NAMES = {
         TYPE: 'type',
         VALUE: 'value',
     },
-    [TABLE_NAMES.LIST]: {
+    [TABLE_NAMES.LISTS]: {
         ID: "id",
         NAME: "name",
         DESCRIPTION: "description",
@@ -110,7 +101,7 @@ export const RELATED_FIELD_NAMES = {
     [TABLE_NAMES.USERACL]: {
         USERROLE: 'userrole',
     },
-    [TABLE_NAMES.LIST]: {
+    [TABLE_NAMES.LISTS]: {
         LISTVALUES: 'listvalues',
         LOGS: 'logs',
     },

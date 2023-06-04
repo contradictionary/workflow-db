@@ -84,7 +84,7 @@ model useracl {
 
 model lists {
   id         Int       @id @default(autoincrement())
-  name       String    @unique
+  name       String    @db.VarChar(255)
   createdon  DateTime? @default(now())
   modifiedon DateTime? @default(now())
 
@@ -95,8 +95,8 @@ model lists {
 model listvalues {
   id     Int    @id @default(autoincrement())
   listid Int
-  key    String
-  value  String
+  key    String @db.VarChar(255)
+  value  String @db.MediumText
   status Int    @default(0)
 
   list lists @relation(fields: [listid], references: [id])
@@ -109,11 +109,11 @@ model listvalues {
 model logs {
   id        Int      @id @default(autoincrement())
   listid    Int //defines kind of log
-  stringid  String?
-  numberid  String?
-  sdata1    String?
-  sdata2    String?
-  sdata3    String?
+  stringid  String?  @db.VarChar(64)
+  numberid  Int?
+  sdata1    String?  @db.VarChar(256)
+  sdata2    String?  @db.VarChar(256)
+  sdata3    String?  @db.VarChar(256)
   ndata1    Int?
   ndata2    Int?
   ndata3    Int?
