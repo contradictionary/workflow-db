@@ -29,6 +29,7 @@ model users {
 
   userrole     userroles      @relation(references: [id], fields: [userroleid])
   usersessions usersessions[]
+  oldusersessions oldusersessions[]
 
   @@index([email])
   @@index([userroleid]) //faster foreign key results
@@ -44,14 +45,17 @@ model usersessions {
   user users @relation(fields: [userid], references: [id])
 
   @@unique([userid, sessionid])
+  @@index([userid])
 }
 
-model oldsessions {
+model oldusersessions {
   id        Int      @id @default(autoincrement())
   userid    Int
   sessionid String   @default(uuid())
   device    String
   createdon DateTime @default(now()) //when moving from new to old session
+  user users @relation(fields: [userid], references: [id])
+  @@index([userid])
 }
 
 model userroles {

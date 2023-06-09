@@ -3,6 +3,7 @@ declare module 'workflow-db' {
     export * from '@prisma/client';
     export const Close: Promise<void>
     export const Run: Promise<boolean>
+    export const Prisma:prisma_client.Prisma;
     export const SetLogger: (logger: any) => any
     export const Client: prisma_client.PrismaClient
     export namespace enums {
