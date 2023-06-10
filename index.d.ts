@@ -1,11 +1,11 @@
 declare module 'workflow-db' {
-    import * as prisma_client from '@prisma/client';
+    // import * as prisma_client from '@prisma/client';
     export * from '@prisma/client';
     export const Close: Promise<void>
     export const Run: Promise<boolean>
-    export const Prisma:prisma_client.Prisma;
+    // export const Prisma: prisma_client.Prisma;
     export const SetLogger: (logger: any) => any
-    export const Client: prisma_client.PrismaClient
+    // export const Client: prisma_client.PrismaClient
     export namespace enums {
         export type AclType = {
             READ: 1;

@@ -62,7 +62,7 @@ model oldusersessions {
 model userroles {
   id          Int      @id @default(autoincrement())
   name        String   @unique
-  description String?
+  description String?  @db.VarChar(255)
   createdby   Int?
   createdon   DateTime @default(now())
   modifiedon  DateTime @default(now())
@@ -84,7 +84,7 @@ model useracl {
 
 model lists {
   id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
+  name       String    @unique @db.VarChar(255)
   createdon  DateTime? @default(now())
   modifiedon DateTime? @default(now())
 
@@ -113,7 +113,7 @@ model logs {
   numberid  Int?
   sdata1    String?  @db.VarChar(256)
   sdata2    String?  @db.VarChar(256)
-  sdata3    String?  @db.VarChar(256)
+  sdata3    String?  @db.MediumText
   ndata1    Int?
   ndata2    Int?
   ndata3    Int?

@@ -81,6 +81,21 @@ export const TABLE_FIELDS_NAMES = {
         VALUE: "value",
         STATUS: "status"
     },
+    [TABLE_NAMES.LOGS]:{
+        ID:'id',
+        LISTID:'listid',
+        STRINGID:'stringid',
+        NUMBERID:'numberid',
+        SDATA1:'sdata1',
+        SDATA2:'sdata2',
+        SDATA3:'sdata3',
+        NDATA1:'ndata1',
+        NDATA2:'ndata2',
+        NDATA3:'ndata3',
+        NDATA4:'ndata4',
+        BDATA1:'bdata1',
+        CREATEDON:'createdon',
+    }
 }
 export const RELATED_FIELD_NAMES = {
     [TABLE_NAMES.USERS]: {
