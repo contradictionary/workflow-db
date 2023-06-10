@@ -7,9 +7,16 @@ export const prismaClient = new PrismaClient({
             emit: 'event',
             level: 'error',
         },
+        // {
+        //     emit: 'event',
+        //     level: 'query',
+        // }
     ],
 });
 prismaClient.$on('error', (e) => { objDBLogger.error(`timestamp|${e.timestamp}|message|${e.message}|target|${e.target}`) });
+prismaClient.$on('query', (e) => { 
+    objDBLogger.debug(`timestamp|${e.timestamp}|duration|${e.duration}|query|${e.query}`)
+});
 const pragmas = ['journal_mode = WAL'];
 export function RunPragma() {
     pragmas.forEach((item) => prismaClient.$executeRaw`PRAGMA ${item}`);
